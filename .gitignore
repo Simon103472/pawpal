@@ -1,0 +1,12 @@
+# Bestand met het databasewachtwoord: nooit naar GitHub
+includes/config.php
+
+# Tijdelijk testbestand
+test-db.php
+
+# Aantekeningen voor de AI-assistent (alleen lokaal)
+CLAUDE.md
+
+# Inleverbestanden en editorinstellingen
+*.zip
+.vscode/

@@ -1,0 +1,135 @@
+/* ============================================================
+   PawPal - basisopmaak
+   Kleuren uit het ontwerp:
+   lichtgeel #FEF3C7, oranje #D97706, groenblauw #0F766E, donkergrijs #1F2937
+   ============================================================ */
+
+/* De kleuren staan een keer bovenaan, zodat we ze overal met var(...) kunnen gebruiken */
+:root {
+    --lichtgeel: #FEF3C7;
+    --oranje: #D97706;
+    --groenblauw: #0F766E;
+    --donkergrijs: #1F2937;
+    --wit: #FFFFFF;
+}
+
+/* Breedte van een element is inclusief padding en rand: rekent makkelijker */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--donkergrijs);
+    background-color: var(--lichtgeel);
+    /* Zorgt dat de voettekst onderaan staat, ook bij een korte pagina */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Houdt de inhoud in het midden en niet te breed op een groot scherm */
+.container {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+main {
+    flex: 1;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+h1, h2 {
+    line-height: 1.2;
+    color: var(--groenblauw);
+}
+
+a {
+    color: var(--groenblauw);
+}
+
+/* Duidelijke rand als je met het toetsenbord (Tab) door de pagina gaat */
+a:focus-visible {
+    outline: 3px solid var(--oranje);
+    outline-offset: 2px;
+}
+
+/* ---------- Kop en navigatie ---------- */
+.kop {
+    background-color: var(--groenblauw);
+}
+
+.kop-inhoud {
+    display: flex;
+    flex-wrap: wrap; /* op een smal scherm komt het menu onder het logo */
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--wit);
+    text-decoration: none;
+}
+
+.navigatie {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+}
+
+.navigatie a {
+    color: var(--wit);
+    text-decoration: none;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+}
+
+.navigatie a:hover {
+    border-bottom-color: var(--lichtgeel);
+}
+
+/* ---------- Startpagina ---------- */
+.inleiding {
+    font-size: 1.125rem;
+    max-width: 40rem;
+}
+
+/* ---------- Kaarten ---------- */
+/* Zoveel kaarten naast elkaar als er passen; op een telefoon onder elkaar */
+.kaarten {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.kaart {
+    background-color: var(--wit);
+    border-top: 4px solid var(--oranje);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 1px 3px rgba(31, 41, 55, 0.15);
+}
+
+.kaart h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+}
+
+/* ---------- Voettekst ---------- */
+.voet {
+    background-color: var(--donkergrijs);
+    color: var(--wit);
+    font-size: 0.875rem;
+    text-align: center;
+}
