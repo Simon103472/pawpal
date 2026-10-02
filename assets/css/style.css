@@ -99,6 +99,97 @@ a:focus-visible {
     border-bottom-color: var(--lichtgeel);
 }
 
+.navigatie {
+    align-items: center;
+}
+
+.navigatie-naam {
+    color: var(--lichtgeel);
+}
+
+/* De uitlogknop is een formulierknop, maar ziet eruit als een menulink */
+.navigatie-knop {
+    font: inherit;
+    color: var(--wit);
+    background: none;
+    border: 1px solid var(--wit);
+    border-radius: 6px;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+}
+
+.navigatie-knop:hover {
+    background-color: var(--wit);
+    color: var(--groenblauw);
+}
+
+/* ---------- Formulieren ---------- */
+.formulier {
+    background-color: var(--wit);
+    border-radius: 8px;
+    padding: 1.25rem;
+    max-width: 28rem;
+    box-shadow: 0 1px 3px rgba(31, 41, 55, 0.15);
+}
+
+.formulier label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.formulier input {
+    display: block;
+    width: 100%;
+    font: inherit;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--donkergrijs);
+    border-radius: 6px;
+}
+
+.formulier input:focus-visible,
+.knop:focus-visible,
+.navigatie-knop:focus-visible {
+    outline: 3px solid var(--oranje);
+    outline-offset: 2px;
+}
+
+.knop {
+    font: inherit;
+    font-weight: bold;
+    color: var(--wit);
+    background-color: var(--groenblauw);
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.25rem;
+    cursor: pointer;
+}
+
+.knop:hover {
+    background-color: var(--donkergrijs);
+}
+
+/* ---------- Meldingen ---------- */
+.melding {
+    max-width: 28rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border-left: 6px solid var(--groenblauw);
+    background-color: var(--wit);
+}
+
+/* Een foutmelding is rood en begint met het woord "Fout", dus niet alleen kleur */
+.melding-fout {
+    border-left-color: #B91C1C;
+    color: #7F1D1D;
+}
+
+.melding-fout::before {
+    content: "Fout: ";
+    font-weight: bold;
+}
+
 /* ---------- Startpagina ---------- */
 .inleiding {
     font-size: 1.125rem;

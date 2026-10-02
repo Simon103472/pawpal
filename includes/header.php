@@ -1,10 +1,10 @@
 <?php
 // Bovenkant van iedere pagina: begin van de HTML, de kop en de navigatie.
 // Een pagina zet eerst $paginatitel en laadt daarna dit bestand.
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/auth.php';
 
 $paginatitel = $paginatitel ?? 'PawPal';
+$ingelogd = huidige_gebruiker();
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -20,7 +20,17 @@ $paginatitel = $paginatitel ?? 'PawPal';
     <div class="container kop-inhoud">
         <a class="logo" href="<?= BASIS_URL ?>/index.php">PawPal</a>
         <nav class="navigatie" aria-label="Hoofdmenu">
-            <a href="<?= BASIS_URL ?>/index.php">Home</a>
+            <?php if ($ingelogd === null): ?>
+                <a href="<?= BASIS_URL ?>/index.php">Home</a>
+                <a href="<?= BASIS_URL ?>/login.php">Inloggen</a>
+            <?php else: ?>
+                <a href="<?= BASIS_URL . dashboard_pad($ingelogd['rol']) ?>">Dashboard</a>
+                <span class="navigatie-naam"><?= e($ingelogd['naam']) ?></span>
+                <form method="post" action="<?= BASIS_URL ?>/logout.php">
+                    <?= csrf_veld() ?>
+                    <button class="navigatie-knop" type="submit">Uitloggen</button>
+                </form>
+            <?php endif; ?>
         </nav>
     </div>
 </header>
