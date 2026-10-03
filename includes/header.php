@@ -25,6 +25,9 @@ $ingelogd = huidige_gebruiker();
                 <a href="<?= BASIS_URL ?>/login.php">Inloggen</a>
             <?php else: ?>
                 <a href="<?= BASIS_URL . dashboard_pad($ingelogd['rol']) ?>">Dashboard</a>
+                <?php if ($ingelogd['rol'] === 'eigenaar'): ?>
+                    <a href="<?= BASIS_URL ?>/eigenaar/dieren.php">Mijn dieren</a>
+                <?php endif; ?>
                 <span class="navigatie-naam"><?= e($ingelogd['naam']) ?></span>
                 <form method="post" action="<?= BASIS_URL ?>/logout.php">
                     <?= csrf_veld() ?>
@@ -35,3 +38,11 @@ $ingelogd = huidige_gebruiker();
     </div>
 </header>
 <main class="container">
+<?php
+// Een melding van de vorige pagina (bijvoorbeeld "Het dier is toegevoegd") een keer tonen
+if (isset($_SESSION['melding'])):
+    $melding = $_SESSION['melding'];
+    unset($_SESSION['melding']);
+?>
+    <p class="melding <?= $melding['soort'] === 'fout' ? 'melding-fout' : 'melding-succes' ?>" role="status"><?= e($melding['tekst']) ?></p>
+<?php endif; ?>

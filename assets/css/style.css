@@ -138,7 +138,9 @@ a:focus-visible {
     margin-bottom: 0.25rem;
 }
 
-.formulier input {
+.formulier input,
+.formulier select,
+.formulier textarea {
     display: block;
     width: 100%;
     font: inherit;
@@ -146,9 +148,12 @@ a:focus-visible {
     margin-bottom: 1rem;
     border: 1px solid var(--donkergrijs);
     border-radius: 6px;
+    background-color: var(--wit);
 }
 
 .formulier input:focus-visible,
+.formulier select:focus-visible,
+.formulier textarea:focus-visible,
 .knop:focus-visible,
 .navigatie-knop:focus-visible {
     outline: 3px solid var(--oranje);
@@ -164,15 +169,35 @@ a:focus-visible {
     border-radius: 6px;
     padding: 0.6rem 1.25rem;
     cursor: pointer;
+    /* Een link met de class "knop" ziet er hetzelfde uit als een echte knop */
+    display: inline-block;
+    text-decoration: none;
 }
 
 .knop:hover {
     background-color: var(--donkergrijs);
 }
 
+/* Minder opvallende knop, bijvoorbeeld voor Annuleren */
+.knop-licht {
+    color: var(--donkergrijs);
+    background-color: var(--lichtgeel);
+    border: 1px solid var(--donkergrijs);
+}
+
+.knop-licht:hover {
+    color: var(--wit);
+}
+
+/* Knop voor een actie die niet terug te draaien is, zoals verwijderen */
+.knop-gevaar {
+    background-color: #B91C1C;
+}
+
 /* ---------- Meldingen ---------- */
 .melding {
     max-width: 28rem;
+    margin: 0 0 1rem;
     padding: 0.75rem 1rem;
     border-radius: 6px;
     border-left: 6px solid var(--groenblauw);
@@ -188,6 +213,16 @@ a:focus-visible {
 .melding-fout::before {
     content: "Fout: ";
     font-weight: bold;
+}
+
+.melding ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.25rem;
+}
+
+/* Waarschuwing, bijvoorbeeld de vraag "weet je het zeker?" */
+.melding-let-op {
+    border-left-color: var(--oranje);
 }
 
 /* ---------- Startpagina ---------- */
@@ -212,9 +247,25 @@ a:focus-visible {
     box-shadow: 0 1px 3px rgba(31, 41, 55, 0.15);
 }
 
-.kaart h2 {
+.kaart h2,
+.kaart h3 {
     margin-top: 0;
     font-size: 1.25rem;
+    color: var(--groenblauw);
+    /* Een lange naam zonder spaties breekt af in plaats van buiten de kaart te vallen */
+    overflow-wrap: anywhere;
+}
+
+/* De links onderaan een kaart naast elkaar, met ruimte ertussen */
+.kaart-acties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-bottom: 0;
+}
+
+.kaarten {
+    margin-bottom: 1.5rem;
 }
 
 /* ---------- Voettekst ---------- */

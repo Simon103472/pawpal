@@ -77,3 +77,46 @@ Per dag een korte uitleg van wat er gemaakt is.
 - De loginpagina en het dashboard werken op computer en op telefoonbreedte.
 
 **Eisen en planning:** TE-03, een deel van FE-07 (rolcontrole) en TE-04 (invoer controleren, veilige uitvoer, foutmeldingen). Planningstaak T-07.
+
+---
+
+## Dag 3 – 3 oktober 2026
+
+**Wat is er gemaakt**
+
+- De pagina "Mijn dieren": dieren bekijken als kaarten, toevoegen, wijzigen en verwijderen.
+- De pagina "Verzorging": per dier voeding, contactpersoon en bijzonderheden opslaan en aanpassen.
+- Het dashboard van de eigenaar laat nu de eigen dieren zien.
+- Meldingen na een actie, bijvoorbeeld "Het dier is verwijderd."
+
+**Hoe werkt het**
+
+- `eigen_dier()` in `functions.php` haalt een dier op met `WHERE id = ? AND eigenaar_id = ?`. Het nummer van het dier staat in de URL en kan dus worden veranderd. Omdat de query ook op de eigenaar zoekt, krijgt iemand nooit het dier van een ander. Dan volgt de melding "Dit dier is niet gevonden."
+- Ook de UPDATE en DELETE hebben `AND eigenaar_id = ?`. De controle zit dus op twee plekken.
+- `eigenaar/dieren.php` doet drie dingen. Bij `actie=opslaan` wordt de invoer gecontroleerd en volgt een INSERT (nieuw dier) of een UPDATE (bestaand dier). Bij `actie=verwijderen` volgt een DELETE. Zonder formulier toont de pagina de kaarten en het formulier.
+- De invoer wordt op de server gecontroleerd: naam verplicht en maximaal 100 tekens, diersoort moet in de vaste lijst `DIERSOORTEN` staan, en de geboortedatum moet een echte datum zijn die niet in de toekomst ligt. Bij een fout wordt niets opgeslagen en blijft de ingevulde tekst in het formulier staan.
+- `geldige_datum()` controleert of een datum echt bestaat. 31 februari wordt geweigerd.
+- Verwijderen gaat in twee stappen: eerst de vraag "Weet je zeker...?", daarna pas het echte verwijderen met een POST-formulier. Een dier met een reservering die nog komt, kan niet worden verwijderd.
+- Bij het verwijderen van een dier verdwijnen de verzorgingsgegevens vanzelf mee door `ON DELETE CASCADE` in de database.
+- `eigenaar/verzorging.php` kijkt of er al een rij voor het dier bestaat. Zo ja dan UPDATE, anders INSERT. Bij een fout blijven de oude gegevens in de database staan.
+- `zet_melding()` bewaart een melding in de sessie. Na het doorsturen toont `header.php` de melding één keer en haalt hem weg.
+- Na het opslaan wordt de gebruiker doorgestuurd. Daardoor wordt het formulier niet nog een keer verstuurd als hij de pagina ververst.
+
+**Anders dan in mijn ontwerp**
+
+- Verwijderen heeft een extra bevestigingsstap en wordt geblokkeerd bij een reservering die nog komt. Dat stond niet in het ontwerp.
+- Voeding en contactpersoon zijn verplichte velden; bijzonderheden niet.
+
+**Getest**
+
+- Eva ziet alleen Max en Luna, niet het dier van Tom.
+- Eva kan het dier van Tom niet openen, wijzigen of verwijderen, ook niet door het nummer in de URL of in het formulier te veranderen. De database is daarna onveranderd.
+- Lege naam, onbekende diersoort, datum in de toekomst, niet-bestaande datum en te lange naam worden geweigerd.
+- Dier toevoegen, wijzigen en verwijderen werkt; de gegevens staan goed in de database.
+- HTML in de naam van een dier wordt als gewone tekst getoond.
+- Verzorging opslaan en aanpassen werkt en staat er na opnieuw openen nog.
+- Een dier met een open reservering kan niet worden verwijderd; na afwijzen wel.
+- Een medewerker kan de pagina's van de eigenaar niet openen.
+- De pagina's werken op computer en op telefoonbreedte.
+
+**Eisen en planning:** FE-01, FE-02, het eigenaar-deel van FE-07 en TE-04. Planningstaken T-08 en T-09.
