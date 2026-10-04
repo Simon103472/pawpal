@@ -10,4 +10,6 @@ require_once __DIR__ . '/../includes/header.php';
 <h1>Welkom, <?= e($gebruiker['naam']) ?></h1>
 <p class="inleiding">Je bent ingelogd als opvangmedewerker van locatie <?= e($gebruiker['locatie']) ?>.</p>
 
+<p><a class="knop" href="<?= BASIS_URL ?>/medewerker/capaciteit.php">Capaciteit beheren</a></p>
+
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

@@ -2,8 +2,10 @@
 // Algemene hulpfuncties die op meerdere pagina's nodig zijn.
 require_once __DIR__ . '/db.php';
 
-// De diersoorten die de opvang kent. Dezelfde waarden staan in de database (ENUM).
+// De vaste keuzes van de opvang. Dezelfde waarden staan in de database (ENUM).
 const DIERSOORTEN = ['hond', 'kat', 'konijn'];
+const DIENSTEN = ['ochtend', 'middag'];
+const LOCATIES = ['Noord', 'Zuid'];
 
 /**
  * Maakt tekst veilig om in HTML te tonen (TE-04).
@@ -87,4 +89,58 @@ function eigen_dier(int $dier_id, int $eigenaar_id): ?array
     $dier = $stmt->fetch();
 
     return $dier ?: null;
+}
+
+/**
+ * Telt hoeveel plekken van een capaciteitsrij bezet zijn (FE-04).
+ *
+ * Een plek is bezet bij de status 'aangevraagd' of 'goedgekeurd'.
+ * Een afgewezen reservering telt niet mee: die plek is weer vrij.
+ * Invoer: het id van de capaciteitsrij.
+ * Uitvoer: het aantal bezette plekken.
+ */
+function bezette_plaatsen(int $capaciteit_id): int
+{
+    $stmt = db()->prepare(
+        "SELECT COUNT(*) FROM reserveringen
+         WHERE capaciteit_id = ? AND status IN ('aangevraagd', 'goedgekeurd')"
+    );
+    $stmt->execute([$capaciteit_id]);
+
+    return (int) $stmt->fetchColumn();
+}
+
+/**
+ * Haalt de capaciteit van vandaag en later op, met het aantal bezette en vrije plekken (FE-04).
+ *
+ * Invoer: een diersoort om op te filteren, of null voor alle diersoorten.
+ * Uitvoer: een lijst met rijen. Iedere rij heeft de kolommen van capaciteit
+ * plus 'bezet' en 'vrij' (vrij = max_plaatsen - bezet).
+ */
+function capaciteit_overzicht(?string $diersoort = null): array
+{
+    // LEFT JOIN: ook capaciteit zonder reserveringen komt in de lijst (bezet = 0)
+    $sql = "SELECT c.*, COUNT(r.id) AS bezet
+            FROM capaciteit c
+            LEFT JOIN reserveringen r
+                   ON r.capaciteit_id = c.id AND r.status IN ('aangevraagd', 'goedgekeurd')
+            WHERE c.datum >= CURDATE()";
+    $waarden = [];
+
+    if ($diersoort !== null) {
+        $sql .= ' AND c.diersoort = ?';
+        $waarden[] = $diersoort;
+    }
+
+    $sql .= ' GROUP BY c.id ORDER BY c.datum, c.dienst, c.locatie, c.diersoort';
+
+    $stmt = db()->prepare($sql);
+    $stmt->execute($waarden);
+    $rijen = $stmt->fetchAll();
+
+    foreach ($rijen as $nummer => $rij) {
+        $rijen[$nummer]['vrij'] = $rij['max_plaatsen'] - $rij['bezet'];
+    }
+
+    return $rijen;
 }

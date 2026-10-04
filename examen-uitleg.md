@@ -120,3 +120,49 @@ Per dag een korte uitleg van wat er gemaakt is.
 - De pagina's werken op computer en op telefoonbreedte.
 
 **Eisen en planning:** FE-01, FE-02, het eigenaar-deel van FE-07 en TE-04. Planningstaken T-08 en T-09.
+
+---
+
+## Dag 4 – 4 oktober 2026
+
+**Wat is er gemaakt**
+
+- De pagina "Capaciteit" voor de medewerker: per datum, dienst, locatie en diersoort het aantal plekken instellen, met een overzicht van bezette en vrije plekken.
+- De pagina "Reserveringen" voor de eigenaar: een eigen dier kiezen, een opvangmoment met vrije plekken kiezen en de reservering aanvragen.
+- Een overzicht van de eigen reserveringen met de status in kleur en tekst.
+
+**Hoe werkt het**
+
+- `DIENSTEN` en `LOCATIES` in `functions.php` zijn de vaste keuzes. De invoer wordt met `in_array()` tegen die lijsten gecontroleerd.
+- `bezette_plaatsen()` telt de reserveringen met status aangevraagd of goedgekeurd. Een afgewezen reservering telt niet mee.
+- `capaciteit_overzicht()` haalt de capaciteit vanaf vandaag op en rekent uit: vrij = plekken − bezet. Dezelfde functie wordt door de medewerker (overzicht) en de eigenaar (keuzelijst) gebruikt.
+- Capaciteit opslaan: bestaat de combinatie al, dan wordt het aantal aangepast (UPDATE); anders komt er een nieuwe rij (INSERT). Het aantal moet een heel getal van 0 tot 100 zijn (`ctype_digit()`), de datum mag niet in het verleden liggen, en het aantal mag niet lager worden dan wat al bezet is.
+- Reserveren gaat in twee stappen. Stap 1 kiest het dier (met `method="get"`, er wordt nog niets opgeslagen). Stap 2 toont alleen opvangmomenten voor de diersoort van dat dier waar nog plek is.
+- `maak_reservering()` gebruikt een transactie. `SELECT ... FOR UPDATE` zet de capaciteitsrij op slot. Daarna telt de functie de bezette plekken en slaat de reservering alleen op als er nog plek is. Willen twee mensen tegelijk de laatste plek, dan moet de tweede wachten en krijgt die daarna de melding dat het vol is.
+- Een transactie betekent: alle stappen lukken samen (`commit`) of er gebeurt niets (`rollBack`).
+- De server controleert alles opnieuw, ook als iemand het formulier omzeilt: is het dier van deze eigenaar, past de diersoort bij het opvangmoment, is er nog plek, en heeft het dier op die datum en dienst nog geen reservering.
+- Een nieuwe reservering krijgt vanzelf de status "aangevraagd" (standaardwaarde in de database).
+
+**Anders dan in mijn ontwerp**
+
+- De controle op vrije plekken (taak T-12) is nu al gebouwd, samen met het formulier. Een formulier zonder die controle zou overboeken mogelijk maken.
+- Een dier kan op dezelfde datum en dienst maar op één locatie reserveren. Dat stond niet in het ontwerp.
+- Een afgewezen aanvraag kan niet opnieuw worden gedaan voor precies hetzelfde opvangmoment.
+
+**Getest**
+
+- Een eigenaar kan de capaciteitspagina niet openen en er niets naartoe versturen.
+- Negatief aantal, tekst, kommagetal, datum in het verleden en onbekende keuzes worden geweigerd.
+- Capaciteit toevoegen werkt; dezelfde combinatie opnieuw opslaan past het aantal aan en maakt geen tweede rij.
+- Het aantal kan niet lager worden dan het aantal bezette plekken.
+- Een eigenaar kan niet reserveren voor het dier van een ander, ook niet via de URL of het formulier.
+- Een kat kan niet op een plek voor honden reserveren.
+- Op een volle plek kan niet worden gereserveerd, ook niet door het formulier te omzeilen. De volle plek staat niet meer in de keuzelijst.
+- Hetzelfde dier kan hetzelfde moment niet twee keer reserveren, en ook niet dezelfde datum en dienst op een andere locatie.
+- Een eigenaar ziet alleen zijn eigen reserveringen.
+- Na afwijzen is de plek in het overzicht weer vrij.
+- De pagina's werken op computer en op telefoonbreedte; de tabel schuift op een telefoon zelf opzij.
+
+Nog niet getest: twee reserveringen op precies hetzelfde moment (staat op dag 5).
+
+**Eisen en planning:** FE-03, FE-04, TE-05 (transactie en unieke combinaties) en TE-04. Planningstaken T-10 en T-11, en het bouwen van T-12.

@@ -268,6 +268,59 @@ a:focus-visible {
     margin-bottom: 1.5rem;
 }
 
+/* ---------- Tabellen ---------- */
+/* Op een smal scherm kan de tabel zelf opzij schuiven; de pagina blijft op zijn plek */
+.tabel-omslag {
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.tabel {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--wit);
+}
+
+.tabel th,
+.tabel td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #D1D5DB;
+    white-space: nowrap;
+}
+
+.tabel th {
+    background-color: var(--groenblauw);
+    color: var(--wit);
+}
+
+/* ---------- Status van een reservering ---------- */
+/* De status staat er altijd als tekst; de kleur is extra */
+.status {
+    display: inline-block;
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    font-weight: bold;
+    color: var(--wit);
+}
+
+.status-aangevraagd {
+    background-color: #B45309;
+}
+
+.status-goedgekeurd {
+    background-color: var(--groenblauw);
+}
+
+.status-afgewezen {
+    background-color: #B91C1C;
+}
+
+/* Ruimte tussen twee formulieren of knoppen onder elkaar */
+.formulier {
+    margin-bottom: 1rem;
+}
+
 /* ---------- Voettekst ---------- */
 .voet {
     background-color: var(--donkergrijs);

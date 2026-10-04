@@ -27,6 +27,9 @@ $ingelogd = huidige_gebruiker();
                 <a href="<?= BASIS_URL . dashboard_pad($ingelogd['rol']) ?>">Dashboard</a>
                 <?php if ($ingelogd['rol'] === 'eigenaar'): ?>
                     <a href="<?= BASIS_URL ?>/eigenaar/dieren.php">Mijn dieren</a>
+                    <a href="<?= BASIS_URL ?>/eigenaar/reserveringen.php">Reserveringen</a>
+                <?php else: ?>
+                    <a href="<?= BASIS_URL ?>/medewerker/capaciteit.php">Capaciteit</a>
                 <?php endif; ?>
                 <span class="navigatie-naam"><?= e($ingelogd['naam']) ?></span>
                 <form method="post" action="<?= BASIS_URL ?>/logout.php">

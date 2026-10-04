@@ -32,7 +32,10 @@ require_once __DIR__ . '/../includes/header.php';
             </section>
         <?php endforeach; ?>
     </div>
-    <p><a class="knop" href="<?= BASIS_URL ?>/eigenaar/dieren.php">Mijn dieren beheren</a></p>
+    <p>
+        <a class="knop" href="<?= BASIS_URL ?>/eigenaar/dieren.php">Mijn dieren beheren</a>
+        <a class="knop" href="<?= BASIS_URL ?>/eigenaar/reserveringen.php">Opvang reserveren</a>
+    </p>
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
