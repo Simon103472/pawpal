@@ -29,6 +29,7 @@ $ingelogd = huidige_gebruiker();
                     <a href="<?= BASIS_URL ?>/eigenaar/dieren.php">Mijn dieren</a>
                     <a href="<?= BASIS_URL ?>/eigenaar/reserveringen.php">Reserveringen</a>
                 <?php else: ?>
+                    <a href="<?= BASIS_URL ?>/medewerker/aanvragen.php">Aanvragen</a>
                     <a href="<?= BASIS_URL ?>/medewerker/capaciteit.php">Capaciteit</a>
                 <?php endif; ?>
                 <span class="navigatie-naam"><?= e($ingelogd['naam']) ?></span>

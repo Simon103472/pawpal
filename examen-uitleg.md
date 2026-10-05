@@ -166,3 +166,42 @@ Per dag een korte uitleg van wat er gemaakt is.
 Nog niet getest: twee reserveringen op precies hetzelfde moment (staat op dag 5).
 
 **Eisen en planning:** FE-03, FE-04, TE-05 (transactie en unieke combinaties) en TE-04. Planningstaken T-10 en T-11, en het bouwen van T-12.
+
+---
+
+## Dag 5 – 5 oktober 2026
+
+**Wat is er gemaakt**
+
+- De pagina "Aanvragen" voor de medewerker: open aanvragen bekijken, goedkeuren en afwijzen, en een lijst met aanvragen die al beoordeeld zijn.
+- Het dashboard van de medewerker laat zien hoeveel aanvragen nog open staan.
+- De test met meerdere reserveringen op precies hetzelfde moment.
+
+**Hoe werkt het**
+
+- Elke rij in de tabel heeft een eigen formulier met twee knoppen. De knop waarop geklikt wordt, stuurt zijn waarde mee als `actie`: `goedkeuren` of `afwijzen`. Een andere waarde wordt geweigerd.
+- De status wordt aangepast met `UPDATE reserveringen SET status = ? WHERE id = ? AND status = 'aangevraagd'`. Door dat laatste stuk kan alleen een open aanvraag worden beoordeeld.
+- `rowCount()` geeft het aantal aangepaste rijen. Is dat 0, dan was de aanvraag al beoordeeld of bestaat hij niet. De medewerker krijgt dan de melding "Deze aanvraag is al beoordeeld of bestaat niet meer."
+- Klikken twee medewerkers tegelijk op dezelfde aanvraag, dan wint de eerste. De tweede krijgt de melding hierboven. Daar is geen transactie voor nodig, omdat het één UPDATE is.
+- Goedkeuren verandert niets aan het aantal vrije plekken: een aangevraagde reservering hield de plek al bezet. Afwijzen maakt de plek weer vrij, omdat `bezette_plaatsen()` afgewezen reserveringen niet meetelt.
+- Alle medewerkers mogen aanvragen van beide locaties beoordelen.
+- De pagina toont alleen het dier, de eigenaar en het opvangmoment. Verzorgingsgegevens worden hier niet opgehaald.
+
+**Anders dan in mijn ontwerp**
+
+- Geen afwijkingen. Een beoordeelde aanvraag kan niet meer worden teruggedraaid; dat stond niet in het ontwerp, maar past bij "dubbele actie wordt netjes afgehandeld".
+
+**Getest**
+
+- Tien sessies proberen tegelijk de laatste plek te reserveren, vijf keer achter elkaar: steeds precies 1 reservering in de database en 9 keer de melding dat het vol is.
+- Controleproef: in een tijdelijke kopie zonder `FOR UPDATE` (met een kleine vertraging) kwamen er 10 reserveringen op 1 plek. Met `FOR UPDATE` en dezelfde vertraging bleef het 1. Dat bewijst dat het slot de overboeking voorkomt. De kopie is daarna verwijderd.
+- Een eigenaar kan de aanvragenpagina niet openen en kan zijn eigen aanvraag niet goedkeuren.
+- Goedkeuren en afwijzen veranderen de status; de eigenaar ziet de nieuwe status in zijn eigen overzicht.
+- Na afwijzen is de plek weer vrij en kan er opnieuw op worden gereserveerd.
+- Een aanvraag die al beoordeeld is, kan niet nog een keer worden beoordeeld.
+- Twee medewerkers die tegelijk goedkeuren en afwijzen: één actie lukt, de ander krijgt een nette melding.
+- Een onbekende actie, een niet-bestaande aanvraag en een formulier zonder CSRF-token worden geweigerd.
+- Er staan geen verzorgingsgegevens op de aanvragenpagina.
+- De pagina werkt op computer en op telefoonbreedte. Op een telefoon moet de tabel opzij worden geschoven om de knoppen te zien.
+
+**Eisen en planning:** FE-05, FE-03 en FE-04 (geen overboeking), TE-05. Planningstaken T-12 (test) en T-13.

@@ -316,6 +316,17 @@ a:focus-visible {
     background-color: #B91C1C;
 }
 
+/* Kleinere knoppen naast elkaar in een tabelrij */
+.rij-acties {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.knop-klein {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.875rem;
+}
+
 /* Ruimte tussen twee formulieren of knoppen onder elkaar */
 .formulier {
     margin-bottom: 1rem;
