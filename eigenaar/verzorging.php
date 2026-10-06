@@ -50,22 +50,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Bij een fout slaan we niets op: de oude gegevens blijven in de database staan
     if (!$fouten) {
-        $bijzonderheden = $formulier['bijzonderheden'] !== '' ? $formulier['bijzonderheden'] : null;
+        // De nieuwe waarden. Lege bijzonderheden slaan we op als NULL (geen waarde).
+        $nieuw = [
+            'voeding'        => $formulier['voeding'],
+            'contactpersoon' => $formulier['contactpersoon'],
+            'bijzonderheden' => $formulier['bijzonderheden'] !== '' ? $formulier['bijzonderheden'] : null,
+        ];
 
-        if ($verzorging) {
-            $stmt = db()->prepare(
-                'UPDATE verzorging SET voeding = ?, contactpersoon = ?, bijzonderheden = ? WHERE dier_id = ?'
-            );
-            $stmt->execute([$formulier['voeding'], $formulier['contactpersoon'], $bijzonderheden, $dier['id']]);
-        } else {
-            $stmt = db()->prepare(
-                'INSERT INTO verzorging (dier_id, voeding, contactpersoon, bijzonderheden) VALUES (?, ?, ?, ?)'
-            );
-            $stmt->execute([$dier['id'], $formulier['voeding'], $formulier['contactpersoon'], $bijzonderheden]);
+        $pdo = db();
+
+        try {
+            // Transactie: de verzorging en de logregels worden samen opgeslagen, of geen van beide.
+            // Zo kan er nooit een wijziging zijn zonder logregel (FE-08, TE-05).
+            $pdo->beginTransaction();
+
+            if ($verzorging) {
+                $stmt = $pdo->prepare(
+                    'UPDATE verzorging SET voeding = ?, contactpersoon = ?, bijzonderheden = ? WHERE dier_id = ?'
+                );
+                $stmt->execute([$nieuw['voeding'], $nieuw['contactpersoon'], $nieuw['bijzonderheden'], $dier['id']]);
+            } else {
+                $stmt = $pdo->prepare(
+                    'INSERT INTO verzorging (dier_id, voeding, contactpersoon, bijzonderheden) VALUES (?, ?, ?, ?)'
+                );
+                $stmt->execute([$dier['id'], $nieuw['voeding'], $nieuw['contactpersoon'], $nieuw['bijzonderheden']]);
+            }
+
+            // Per veld vergelijken: alleen een veld dat echt anders is, komt in de wijzigingslog
+            foreach ($nieuw as $veld => $nieuwe_waarde) {
+                $oude_waarde = $verzorging ? $verzorging[$veld] : null;
+
+                if ($oude_waarde !== $nieuwe_waarde) {
+                    log_wijziging($gebruiker['id'], $dier, $veld, $oude_waarde, $nieuwe_waarde);
+                }
+            }
+
+            $pdo->commit();
+        } catch (PDOException $fout) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            error_log('PawPal verzorging opslaan: ' . $fout->getMessage());
+            $fouten[] = 'Opslaan is niet gelukt. Probeer het opnieuw.';
         }
 
-        zet_melding('De verzorgingsgegevens van ' . $dier['naam'] . ' zijn opgeslagen.');
-        doorsturen('/eigenaar/verzorging.php?dier=' . $dier['id']);
+        if (!$fouten) {
+            zet_melding('De verzorgingsgegevens van ' . $dier['naam'] . ' zijn opgeslagen.');
+            doorsturen('/eigenaar/verzorging.php?dier=' . $dier['id']);
+        }
     }
 }
 

@@ -205,3 +205,52 @@ Nog niet getest: twee reserveringen op precies hetzelfde moment (staat op dag 5)
 - De pagina werkt op computer en op telefoonbreedte. Op een telefoon moet de tabel opzij worden geschoven om de knoppen te zien.
 
 **Eisen en planning:** FE-05, FE-03 en FE-04 (geen overboeking), TE-05. Planningstaken T-12 (test) en T-13.
+
+---
+
+## Dag 6 – 6 oktober 2026
+
+**Wat is er gemaakt**
+
+- De pagina "Dagplanning" voor de medewerker, met filters op datum, locatie en dienst.
+- Een pagina waarop de medewerker de verzorgingsgegevens van een dier kan bekijken, maar alleen als hij bij de opvang van dat dier betrokken is.
+- De wijzigingsregistratie: bij iedere aanpassing van verzorgingsgegevens wordt vastgelegd wie het deed, wanneer en wat er veranderde.
+- De pagina "Wijzigingslog" voor de medewerker.
+
+**Hoe werkt het**
+
+- De dagplanning toont alleen goedgekeurde reserveringen van de gekozen dag. De filters staan in de URL (`method="get"`). Zonder keuze zie je vandaag en je eigen locatie.
+- De query wordt stap voor stap opgebouwd: elk gekozen filter voegt `AND c.locatie = ?` of `AND c.dienst = ?` toe. De waarde zelf gaat apart mee in `execute()`. Een onbekende waarde (bijvoorbeeld locatie "Oost") telt als "geen filter".
+- De toegangsregel staat in één functie: `medewerker_mag_verzorging_zien()`. Een medewerker mag de verzorgingsgegevens zien als het dier een **goedgekeurde** reservering heeft op **zijn locatie**, **vandaag of later**. In alle andere gevallen krijgt hij "Je hebt geen toegang tot de verzorgingsgegevens van dit dier."
+- `medewerker/verzorging.php` controleert die regel bovenaan de pagina. Het nummer van het dier in de URL veranderen helpt dus niet.
+- De medewerker kan de verzorgingsgegevens alleen lezen. Aanpassen kan alleen de eigenaar.
+- In `eigenaar/verzorging.php` wordt bij het opslaan per veld de oude waarde met de nieuwe vergeleken. Alleen een veld dat echt anders is, krijgt een regel in de wijzigingslog via `log_wijziging()`. Opslaan zonder iets te veranderen geeft dus geen logregel.
+- Het opslaan van de verzorging en van de logregels zit samen in één transactie. Mislukt er iets, dan wordt alles teruggedraaid. Er kan dus geen wijziging zijn zonder logregel.
+- Een logregel bevat: wie (`gebruiker_id`), welk dier (`dier_id` en `dier_naam`), welk veld, de oude waarde, de nieuwe waarde en het tijdstip. Het tijdstip vult de database zelf in.
+- De oude en nieuwe waarde zijn zelf ook verzorgingsgegevens. Daarom geldt in de wijzigingslog dezelfde toegangsregel: iedere medewerker ziet wie, wanneer, welk dier en welk veld, maar de inhoud staat op "Afgeschermd" als hij niet bij dat dier betrokken is.
+- Wordt een dier verwijderd, dan blijft de logregel staan met de naam en "(verwijderd)" erachter. De inhoud is dan voor iedereen afgeschermd.
+- `nl2br()` laat een nieuwe regel in een tekst ook als nieuwe regel zien. Het staat om `e()` heen, zodat de tekst eerst veilig wordt gemaakt.
+
+**Anders dan in mijn ontwerp**
+
+- De wijzigingslog heeft een eigen pagina `medewerker/wijzigingslog.php` en de medewerker heeft een eigen pagina `medewerker/verzorging.php`. Die stonden niet in de mappenstructuur.
+- In het ontwerp staat bij verzorgingsgegevens "beheren" door eigenaar en betrokken medewerker. In de applicatie kan de medewerker alleen bekijken, niet aanpassen.
+- De inhoud van de wijzigingslog is afgeschermd volgens dezelfde regel als de verzorgingsgegevens. Dat stond niet in het ontwerp.
+- De dagplanning heeft ook een filter op datum.
+
+**Getest**
+
+- De dagplanning toont per filter alleen de passende reserveringen: eigen locatie, alle locaties, Zuid, Noord + ochtend, Noord + middag, alle locaties + middag.
+- Een reservering die alleen is aangevraagd, staat niet in de dagplanning.
+- Een ongeldige datum geeft een foutmelding; een SQL-injectie in het filter doet niets.
+- Medewerker Noord ziet de verzorging van Max (goedgekeurd op Noord), maar niet van Flappie (goedgekeurd op Zuid), niet van een dier dat alleen is aangevraagd en niet van een dier waarvan de reservering gisteren was.
+- Medewerker Zuid ziet de verzorging van Flappie en niet van Max. Na afwijzen van de reservering vervalt de toegang.
+- Een medewerker kan de verzorgingsgegevens niet aanpassen.
+- Een eigenaar kan de dagplanning, de verzorgingspagina van de medewerker en de wijzigingslog niet openen.
+- Opslaan zonder verandering geeft geen logregel; één veld veranderen geeft één logregel met de juiste oude en nieuwe waarde; twee velden geven twee logregels. Ongeldige invoer geeft geen logregel.
+- In de wijzigingslog ziet medewerker Noord de inhoud bij Max en "Afgeschermd" bij Flappie; bij medewerker Zuid is dat andersom.
+- Na het verwijderen van een dier blijft de logregel bestaan.
+- HTML in een verzorgingsveld wordt in de wijzigingslog als gewone tekst getoond.
+- De pagina's werken op computer en op telefoonbreedte.
+
+**Eisen en planning:** FE-06, FE-07, FE-08, TE-04 en TE-05. Planningstaken T-14 en T-15.

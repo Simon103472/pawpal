@@ -24,6 +24,16 @@ require_once __DIR__ . '/../includes/header.php';
         <p>Stel per datum, dienst, locatie en diersoort het aantal plekken in.</p>
         <p class="kaart-acties"><a href="<?= BASIS_URL ?>/medewerker/capaciteit.php">Capaciteit beheren</a></p>
     </section>
+    <section class="kaart">
+        <h2>Dagplanning</h2>
+        <p>Bekijk welke dieren er op een dag komen, per locatie en dienst.</p>
+        <p class="kaart-acties"><a href="<?= BASIS_URL ?>/medewerker/dagplanning.php">Dagplanning bekijken</a></p>
+    </section>
+    <section class="kaart">
+        <h2>Wijzigingslog</h2>
+        <p>Bekijk wie wanneer verzorgingsgegevens heeft aangepast.</p>
+        <p class="kaart-acties"><a href="<?= BASIS_URL ?>/medewerker/wijzigingslog.php">Wijzigingslog bekijken</a></p>
+    </section>
 </div>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

@@ -144,3 +144,46 @@ function capaciteit_overzicht(?string $diersoort = null): array
 
     return $rijen;
 }
+
+/**
+ * Schrijft een regel in de wijzigingslog (FE-08).
+ *
+ * Legt vast wie de wijziging deed, bij welk dier, welk veld het was en wat de
+ * oude en de nieuwe waarde zijn. Het tijdstip vult de database zelf in.
+ * De naam van het dier slaan we apart op, zodat de logregel leesbaar blijft
+ * als het dier later wordt verwijderd.
+ * Invoer: het id van de gebruiker, de rij van het dier, de naam van het veld
+ * en de oude en nieuwe waarde (null betekent: leeg).
+ */
+function log_wijziging(int $gebruiker_id, array $dier, string $veld, ?string $oude_waarde, ?string $nieuwe_waarde): void
+{
+    $stmt = db()->prepare(
+        'INSERT INTO wijzigingslog (gebruiker_id, dier_id, dier_naam, veld, oude_waarde, nieuwe_waarde)
+         VALUES (?, ?, ?, ?, ?, ?)'
+    );
+    $stmt->execute([$gebruiker_id, $dier['id'], $dier['naam'], $veld, $oude_waarde, $nieuwe_waarde]);
+}
+
+/**
+ * De toegangsregel voor gevoelige verzorgingsgegevens (FE-07).
+ *
+ * Een medewerker is "betrokken" bij een dier als dat dier een goedgekeurde
+ * reservering heeft op de locatie van de medewerker, vandaag of later.
+ * Invoer: het id van het dier en de locatie van de medewerker.
+ * Uitvoer: true als de medewerker de verzorgingsgegevens mag zien, anders false.
+ */
+function medewerker_mag_verzorging_zien(int $dier_id, string $locatie): bool
+{
+    $stmt = db()->prepare(
+        "SELECT COUNT(*)
+         FROM reserveringen r
+         JOIN capaciteit c ON c.id = r.capaciteit_id
+         WHERE r.dier_id = ?
+           AND r.status = 'goedgekeurd'
+           AND c.locatie = ?
+           AND c.datum >= CURDATE()"
+    );
+    $stmt->execute([$dier_id, $locatie]);
+
+    return $stmt->fetchColumn() > 0;
+}

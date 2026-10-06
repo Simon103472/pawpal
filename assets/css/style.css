@@ -294,6 +294,29 @@ a:focus-visible {
     color: var(--wit);
 }
 
+/* Een cel met langere tekst mag wel over meerdere regels lopen */
+.tabel td.tabel-tekst {
+    white-space: normal;
+    min-width: 12rem;
+    overflow-wrap: anywhere;
+}
+
+/* Een losse kaart die niet de hele breedte van het scherm vult */
+.kaart-breed {
+    max-width: 40rem;
+    overflow-wrap: anywhere;
+}
+
+.kaart-breed h3 {
+    margin-bottom: 0;
+    font-size: 1rem;
+    color: var(--donkergrijs);
+}
+
+.kaart-breed h3 + p {
+    margin-top: 0.25rem;
+}
+
 /* ---------- Status van een reservering ---------- */
 /* De status staat er altijd als tekst; de kleur is extra */
 .status {

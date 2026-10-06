@@ -31,6 +31,8 @@ $ingelogd = huidige_gebruiker();
                 <?php else: ?>
                     <a href="<?= BASIS_URL ?>/medewerker/aanvragen.php">Aanvragen</a>
                     <a href="<?= BASIS_URL ?>/medewerker/capaciteit.php">Capaciteit</a>
+                    <a href="<?= BASIS_URL ?>/medewerker/dagplanning.php">Dagplanning</a>
+                    <a href="<?= BASIS_URL ?>/medewerker/wijzigingslog.php">Wijzigingslog</a>
                 <?php endif; ?>
                 <span class="navigatie-naam"><?= e($ingelogd['naam']) ?></span>
                 <form method="post" action="<?= BASIS_URL ?>/logout.php">
