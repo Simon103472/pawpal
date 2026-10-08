@@ -110,11 +110,11 @@ require_once __DIR__ . '/../includes/header.php';
             <tbody>
                 <?php foreach ($planning as $rij): ?>
                     <tr>
-                        <td><?= e($rij['dienst']) ?></td>
-                        <td><?= e($rij['locatie']) ?></td>
-                        <td><?= e($rij['dier_naam']) ?> (<?= e($rij['diersoort']) ?>)</td>
-                        <td><?= e($rij['eigenaar_naam']) ?></td>
-                        <td>
+                        <td data-label="Dienst"><?= e($rij['dienst']) ?></td>
+                        <td data-label="Locatie"><?= e($rij['locatie']) ?></td>
+                        <td data-label="Dier"><?= e($rij['dier_naam']) ?> (<?= e($rij['diersoort']) ?>)</td>
+                        <td data-label="Eigenaar"><?= e($rij['eigenaar_naam']) ?></td>
+                        <td data-label="Verzorging">
                             <?php if (medewerker_mag_verzorging_zien($rij['dier_id'], $gebruiker['locatie'])): ?>
                                 <a href="<?= BASIS_URL ?>/medewerker/verzorging.php?dier=<?= e((string) $rij['dier_id']) ?>">Bekijken</a>
                             <?php else: ?>

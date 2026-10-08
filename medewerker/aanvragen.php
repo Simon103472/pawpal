@@ -89,13 +89,13 @@ require_once __DIR__ . '/../includes/header.php';
             <tbody>
                 <?php foreach ($open as $rij): ?>
                     <tr>
-                        <td><?= e(datum_nl($rij['datum'])) ?></td>
-                        <td><?= e($rij['dienst']) ?></td>
-                        <td><?= e($rij['locatie']) ?></td>
-                        <td><?= e($rij['dier_naam']) ?> (<?= e($rij['diersoort']) ?>)</td>
-                        <td><?= e($rij['eigenaar_naam']) ?></td>
-                        <td><span class="status status-<?= e($rij['status']) ?>"><?= e(ucfirst($rij['status'])) ?></span></td>
-                        <td>
+                        <td data-label="Datum"><?= e(datum_nl($rij['datum'])) ?></td>
+                        <td data-label="Dienst"><?= e($rij['dienst']) ?></td>
+                        <td data-label="Locatie"><?= e($rij['locatie']) ?></td>
+                        <td data-label="Dier"><?= e($rij['dier_naam']) ?> (<?= e($rij['diersoort']) ?>)</td>
+                        <td data-label="Eigenaar"><?= e($rij['eigenaar_naam']) ?></td>
+                        <td data-label="Status"><span class="status status-<?= e($rij['status']) ?>"><?= e(ucfirst($rij['status'])) ?></span></td>
+                        <td data-label="Actie">
                             <!-- Een formulier per rij; de aangeklikte knop stuurt zijn eigen waarde mee als "actie" -->
                             <form class="rij-acties" method="post" action="<?= BASIS_URL ?>/medewerker/aanvragen.php">
                                 <?= csrf_veld() ?>
@@ -131,12 +131,12 @@ require_once __DIR__ . '/../includes/header.php';
             <tbody>
                 <?php foreach ($beoordeeld as $rij): ?>
                     <tr>
-                        <td><?= e(datum_nl($rij['datum'])) ?></td>
-                        <td><?= e($rij['dienst']) ?></td>
-                        <td><?= e($rij['locatie']) ?></td>
-                        <td><?= e($rij['dier_naam']) ?> (<?= e($rij['diersoort']) ?>)</td>
-                        <td><?= e($rij['eigenaar_naam']) ?></td>
-                        <td><span class="status status-<?= e($rij['status']) ?>"><?= e(ucfirst($rij['status'])) ?></span></td>
+                        <td data-label="Datum"><?= e(datum_nl($rij['datum'])) ?></td>
+                        <td data-label="Dienst"><?= e($rij['dienst']) ?></td>
+                        <td data-label="Locatie"><?= e($rij['locatie']) ?></td>
+                        <td data-label="Dier"><?= e($rij['dier_naam']) ?> (<?= e($rij['diersoort']) ?>)</td>
+                        <td data-label="Eigenaar"><?= e($rij['eigenaar_naam']) ?></td>
+                        <td data-label="Status"><span class="status status-<?= e($rij['status']) ?>"><?= e(ucfirst($rij['status'])) ?></span></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

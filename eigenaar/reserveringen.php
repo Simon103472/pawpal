@@ -216,11 +216,11 @@ require_once __DIR__ . '/../includes/header.php';
             <tbody>
                 <?php foreach ($reserveringen as $reservering): ?>
                     <tr>
-                        <td><?= e($reservering['dier_naam']) ?></td>
-                        <td><?= e(datum_nl($reservering['datum'])) ?></td>
-                        <td><?= e($reservering['dienst']) ?></td>
-                        <td><?= e($reservering['locatie']) ?></td>
-                        <td><span class="status status-<?= e($reservering['status']) ?>"><?= e(ucfirst($reservering['status'])) ?></span></td>
+                        <td data-label="Dier"><?= e($reservering['dier_naam']) ?></td>
+                        <td data-label="Datum"><?= e(datum_nl($reservering['datum'])) ?></td>
+                        <td data-label="Dienst"><?= e($reservering['dienst']) ?></td>
+                        <td data-label="Locatie"><?= e($reservering['locatie']) ?></td>
+                        <td data-label="Status"><span class="status status-<?= e($reservering['status']) ?>"><?= e(ucfirst($reservering['status'])) ?></span></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

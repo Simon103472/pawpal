@@ -51,15 +51,15 @@ require_once __DIR__ . '/../includes/header.php';
                 <?php foreach ($regels as $regel): ?>
                     <?php $mag_inhoud_zien = $regel['dier_id'] !== null && $toegang[$regel['dier_id']]; ?>
                     <tr>
-                        <td><?= e(date('d-m-Y H:i', strtotime($regel['aangemaakt_op']))) ?></td>
-                        <td><?= e($regel['gebruiker_naam']) ?></td>
-                        <td><?= e($regel['dier_naam']) ?><?= $regel['dier_id'] === null ? ' (verwijderd)' : '' ?></td>
-                        <td><?= e($regel['veld']) ?></td>
+                        <td data-label="Wanneer"><?= e(date('d-m-Y H:i', strtotime($regel['aangemaakt_op']))) ?></td>
+                        <td data-label="Wie"><?= e($regel['gebruiker_naam']) ?></td>
+                        <td data-label="Dier"><?= e($regel['dier_naam']) ?><?= $regel['dier_id'] === null ? ' (verwijderd)' : '' ?></td>
+                        <td data-label="Veld"><?= e($regel['veld']) ?></td>
                         <?php if ($mag_inhoud_zien): ?>
-                            <td class="tabel-tekst"><?= $regel['oude_waarde'] !== null ? nl2br(e($regel['oude_waarde'])) : '(leeg)' ?></td>
-                            <td class="tabel-tekst"><?= $regel['nieuwe_waarde'] !== null ? nl2br(e($regel['nieuwe_waarde'])) : '(leeg)' ?></td>
+                            <td data-label="Oude waarde" class="tabel-tekst"><?= $regel['oude_waarde'] !== null ? nl2br(e($regel['oude_waarde'])) : '(leeg)' ?></td>
+                            <td data-label="Nieuwe waarde" class="tabel-tekst"><?= $regel['nieuwe_waarde'] !== null ? nl2br(e($regel['nieuwe_waarde'])) : '(leeg)' ?></td>
                         <?php else: ?>
-                            <td colspan="2">Afgeschermd</td>
+                            <td data-label="Inhoud" colspan="2">Afgeschermd</td>
                         <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>

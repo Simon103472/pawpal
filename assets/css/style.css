@@ -1,7 +1,8 @@
 /* ============================================================
-   PawPal - basisopmaak
-   Kleuren uit het ontwerp:
+   PawPal - opmaak
+   Hoofdkleuren uit het ontwerp:
    lichtgeel #FEF3C7, oranje #D97706, groenblauw #0F766E, donkergrijs #1F2937
+   De extra kleuren hieronder zijn lichtere en donkerdere tinten daarvan.
    ============================================================ */
 
 /* De kleuren staan een keer bovenaan, zodat we ze overal met var(...) kunnen gebruiken */
@@ -11,6 +12,15 @@
     --groenblauw: #0F766E;
     --donkergrijs: #1F2937;
     --wit: #FFFFFF;
+
+    --donkergroen: #115E59;
+    --lichtgroen: #CCFBF1;
+    --lichtoranje: #FFEDD5;
+    --zachtgeel: #FFFBEB;
+    --rood: #B91C1C;
+    --lichtrood: #FEE2E2;
+    --rand: #E5E7EB;
+    --schaduw: 0 2px 6px rgba(31, 41, 55, 0.12);
 }
 
 /* Breedte van een element is inclusief padding en rand: rekent makkelijker */
@@ -50,8 +60,23 @@ h1, h2 {
     color: var(--groenblauw);
 }
 
+/* Een oranje streepje onder de titel van iedere pagina */
+h1::after {
+    content: "";
+    display: block;
+    width: 4rem;
+    height: 4px;
+    margin-top: 0.5rem;
+    border-radius: 2px;
+    background-color: var(--oranje);
+}
+
 a {
     color: var(--groenblauw);
+}
+
+a:hover {
+    color: var(--donkergroen);
 }
 
 /* Duidelijke rand als je met het toetsenbord (Tab) door de pagina gaat */
@@ -62,7 +87,9 @@ a:focus-visible {
 
 /* ---------- Kop en navigatie ---------- */
 .kop {
-    background-color: var(--groenblauw);
+    /* Kleurverloop van groenblauw naar donkergroen, met een oranje rand eronder */
+    background: linear-gradient(135deg, var(--groenblauw), var(--donkergroen));
+    border-bottom: 4px solid var(--oranje);
 }
 
 .kop-inhoud {
@@ -71,40 +98,56 @@ a:focus-visible {
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem 1rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
 }
 
+/* Het logo: het pootje (SVG-afbeelding) met de naam ernaast */
 .logo {
-    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.6rem;
     font-weight: bold;
     color: var(--wit);
     text-decoration: none;
 }
 
+.logo:hover {
+    color: var(--wit);
+}
+
+.logo-beeld {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.logo-accent {
+    color: var(--lichtgeel);
+}
+
 .navigatie {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem 1rem;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
 }
 
 .navigatie a {
     color: var(--wit);
     text-decoration: none;
-    padding: 0.25rem 0;
-    border-bottom: 2px solid transparent;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
 }
 
 .navigatie a:hover {
-    border-bottom-color: var(--lichtgeel);
-}
-
-.navigatie {
-    align-items: center;
+    color: var(--wit);
+    background-color: rgba(255, 255, 255, 0.18);
 }
 
 .navigatie-naam {
     color: var(--lichtgeel);
+    padding: 0 0.4rem;
 }
 
 /* De uitlogknop is een formulierknop, maar ziet eruit als een menulink */
@@ -113,8 +156,8 @@ a:focus-visible {
     color: var(--wit);
     background: none;
     border: 1px solid var(--wit);
-    border-radius: 6px;
-    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    padding: 0.25rem 0.9rem;
     cursor: pointer;
 }
 
@@ -126,10 +169,12 @@ a:focus-visible {
 /* ---------- Formulieren ---------- */
 .formulier {
     background-color: var(--wit);
-    border-radius: 8px;
+    border-top: 4px solid var(--groenblauw);
+    border-radius: 12px;
     padding: 1.25rem;
     max-width: 28rem;
-    box-shadow: 0 1px 3px rgba(31, 41, 55, 0.15);
+    margin-bottom: 1rem;
+    box-shadow: var(--schaduw);
 }
 
 .formulier label {
@@ -148,7 +193,7 @@ a:focus-visible {
     margin-bottom: 1rem;
     border: 1px solid var(--donkergrijs);
     border-radius: 6px;
-    background-color: var(--wit);
+    background-color: var(--zachtgeel);
 }
 
 .formulier input:focus-visible,
@@ -166,7 +211,7 @@ a:focus-visible {
     color: var(--wit);
     background-color: var(--groenblauw);
     border: none;
-    border-radius: 6px;
+    border-radius: 999px;
     padding: 0.6rem 1.25rem;
     cursor: pointer;
     /* Een link met de class "knop" ziet er hetzelfde uit als een echte knop */
@@ -175,7 +220,8 @@ a:focus-visible {
 }
 
 .knop:hover {
-    background-color: var(--donkergrijs);
+    color: var(--wit);
+    background-color: var(--donkergroen);
 }
 
 /* Minder opvallende knop, bijvoorbeeld voor Annuleren */
@@ -186,12 +232,28 @@ a:focus-visible {
 }
 
 .knop-licht:hover {
-    color: var(--wit);
+    color: var(--donkergrijs);
+    background-color: var(--lichtoranje);
+}
+
+/* Opvallende oranje knop met donkere tekst (goed leesbaar) */
+.knop-accent {
+    color: var(--donkergrijs);
+    background-color: var(--oranje);
+}
+
+.knop-accent:hover {
+    color: var(--donkergrijs);
+    background-color: var(--lichtgeel);
 }
 
 /* Knop voor een actie die niet terug te draaien is, zoals verwijderen */
 .knop-gevaar {
-    background-color: #B91C1C;
+    background-color: var(--rood);
+}
+
+.knop-gevaar:hover {
+    background-color: #7F1D1D;
 }
 
 /* ---------- Meldingen ---------- */
@@ -199,14 +261,20 @@ a:focus-visible {
     max-width: 28rem;
     margin: 0 0 1rem;
     padding: 0.75rem 1rem;
-    border-radius: 6px;
+    border-radius: 8px;
     border-left: 6px solid var(--groenblauw);
     background-color: var(--wit);
 }
 
+/* Groene melding: iets is gelukt */
+.melding-succes {
+    background-color: var(--lichtgroen);
+}
+
 /* Een foutmelding is rood en begint met het woord "Fout", dus niet alleen kleur */
 .melding-fout {
-    border-left-color: #B91C1C;
+    border-left-color: var(--rood);
+    background-color: var(--lichtrood);
     color: #7F1D1D;
 }
 
@@ -223,6 +291,7 @@ a:focus-visible {
 /* Waarschuwing, bijvoorbeeld de vraag "weet je het zeker?" */
 .melding-let-op {
     border-left-color: var(--oranje);
+    background-color: var(--lichtoranje);
 }
 
 /* ---------- Startpagina ---------- */
@@ -231,20 +300,45 @@ a:focus-visible {
     max-width: 40rem;
 }
 
+/* Het grote gekleurde blok bovenaan de startpagina */
+.held {
+    background: linear-gradient(135deg, var(--groenblauw), var(--donkergroen));
+    color: var(--wit);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--schaduw);
+}
+
+.held h1 {
+    margin-top: 0;
+    color: var(--wit);
+}
+
+.held .inleiding {
+    margin-bottom: 1.5rem;
+}
+
 /* ---------- Kaarten ---------- */
 /* Zoveel kaarten naast elkaar als er passen; op een telefoon onder elkaar */
 .kaarten {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .kaart {
     background-color: var(--wit);
-    border-top: 4px solid var(--oranje);
-    border-radius: 8px;
+    border-top: 5px solid var(--oranje);
+    border-radius: 12px;
     padding: 1rem 1.25rem;
-    box-shadow: 0 1px 3px rgba(31, 41, 55, 0.15);
+    box-shadow: var(--schaduw);
+}
+
+/* Om en om een oranje en een groenblauwe rand, voor wat meer kleur */
+.kaart:nth-child(even) {
+    border-top-color: var(--groenblauw);
 }
 
 .kaart h2,
@@ -262,43 +356,9 @@ a:focus-visible {
     flex-wrap: wrap;
     gap: 0.25rem 1rem;
     margin-bottom: 0;
-}
-
-.kaarten {
-    margin-bottom: 1.5rem;
-}
-
-/* ---------- Tabellen ---------- */
-/* Op een smal scherm kan de tabel zelf opzij schuiven; de pagina blijft op zijn plek */
-.tabel-omslag {
-    overflow-x: auto;
-    margin-bottom: 1.5rem;
-}
-
-.tabel {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: var(--wit);
-}
-
-.tabel th,
-.tabel td {
-    text-align: left;
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid #D1D5DB;
-    white-space: nowrap;
-}
-
-.tabel th {
-    background-color: var(--groenblauw);
-    color: var(--wit);
-}
-
-/* Een cel met langere tekst mag wel over meerdere regels lopen */
-.tabel td.tabel-tekst {
-    white-space: normal;
-    min-width: 12rem;
-    overflow-wrap: anywhere;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--rand);
+    font-weight: bold;
 }
 
 /* Een losse kaart die niet de hele breedte van het scherm vult */
@@ -315,6 +375,106 @@ a:focus-visible {
 
 .kaart-breed h3 + p {
     margin-top: 0.25rem;
+}
+
+/* ---------- Tabellen ---------- */
+/* Als een tabel toch te breed is, schuift alleen de tabel opzij en niet de hele pagina */
+.tabel-omslag {
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--schaduw);
+}
+
+.tabel {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--wit);
+}
+
+.tabel th,
+.tabel td {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--rand);
+    white-space: nowrap;
+}
+
+.tabel th {
+    background-color: var(--groenblauw);
+    color: var(--wit);
+}
+
+/* Om en om een lichtgele rij: zo lees je een lange tabel makkelijker */
+.tabel tbody tr:nth-child(even) {
+    background-color: var(--zachtgeel);
+}
+
+/* Een cel met langere tekst mag wel over meerdere regels lopen */
+.tabel td.tabel-tekst {
+    white-space: normal;
+    min-width: 12rem;
+    overflow-wrap: anywhere;
+}
+
+/* Op een telefoon of staande tablet (scherm tot 800px breed) wordt iedere rij een
+   eigen blokje. De koprij verdwijnt; de naam van de kolom komt uit het attribuut
+   data-label van de cel en staat links van de waarde. Zo hoef je niet opzij te schuiven. */
+@media (max-width: 800px) {
+    .tabel,
+    .tabel tbody,
+    .tabel tr,
+    .tabel td {
+        display: block;
+    }
+
+    .tabel {
+        background: none;
+    }
+
+    .tabel-omslag {
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .tabel thead {
+        display: none;
+    }
+
+    .tabel tr,
+    .tabel tbody tr:nth-child(even) {
+        background-color: var(--wit);
+        border-top: 5px solid var(--oranje);
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        padding: 0.5rem 0;
+        box-shadow: var(--schaduw);
+    }
+
+    .tabel tbody tr:nth-child(even) {
+        border-top-color: var(--groenblauw);
+    }
+
+    .tabel td,
+    .tabel td.tabel-tekst {
+        display: flex;
+        gap: 0.75rem;
+        border-bottom: none;
+        padding: 0.25rem 1rem;
+        white-space: normal;
+        min-width: 0;
+    }
+
+    .tabel td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: var(--groenblauw);
+        flex: 0 0 7rem;
+    }
+
+    .rij-acties {
+        flex-wrap: wrap;
+    }
 }
 
 /* ---------- Status van een reservering ---------- */
@@ -336,7 +496,7 @@ a:focus-visible {
 }
 
 .status-afgewezen {
-    background-color: #B91C1C;
+    background-color: var(--rood);
 }
 
 /* Kleinere knoppen naast elkaar in een tabelrij */
@@ -350,14 +510,10 @@ a:focus-visible {
     font-size: 0.875rem;
 }
 
-/* Ruimte tussen twee formulieren of knoppen onder elkaar */
-.formulier {
-    margin-bottom: 1rem;
-}
-
 /* ---------- Voettekst ---------- */
 .voet {
     background-color: var(--donkergrijs);
+    border-top: 4px solid var(--oranje);
     color: var(--wit);
     font-size: 0.875rem;
     text-align: center;

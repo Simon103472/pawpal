@@ -159,14 +159,14 @@ require_once __DIR__ . '/../includes/header.php';
             <tbody>
                 <?php foreach ($overzicht as $rij): ?>
                     <tr>
-                        <td><?= e(datum_nl($rij['datum'])) ?></td>
-                        <td><?= e($rij['dienst']) ?></td>
-                        <td><?= e($rij['locatie']) ?></td>
-                        <td><?= e($rij['diersoort']) ?></td>
-                        <td><?= e((string) $rij['max_plaatsen']) ?></td>
-                        <td><?= e((string) $rij['bezet']) ?></td>
-                        <td><?= $rij['vrij'] > 0 ? e((string) $rij['vrij']) : '<strong>vol</strong>' ?></td>
-                        <td><a href="<?= BASIS_URL ?>/medewerker/capaciteit.php?bewerk=<?= e((string) $rij['id']) ?>#formulier">Wijzigen</a></td>
+                        <td data-label="Datum"><?= e(datum_nl($rij['datum'])) ?></td>
+                        <td data-label="Dienst"><?= e($rij['dienst']) ?></td>
+                        <td data-label="Locatie"><?= e($rij['locatie']) ?></td>
+                        <td data-label="Diersoort"><?= e($rij['diersoort']) ?></td>
+                        <td data-label="Plekken"><?= e((string) $rij['max_plaatsen']) ?></td>
+                        <td data-label="Bezet"><?= e((string) $rij['bezet']) ?></td>
+                        <td data-label="Vrij"><?= $rij['vrij'] > 0 ? e((string) $rij['vrij']) : '<strong>vol</strong>' ?></td>
+                        <td data-label="Actie"><a href="<?= BASIS_URL ?>/medewerker/capaciteit.php?bewerk=<?= e((string) $rij['id']) ?>#formulier">Wijzigen</a></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

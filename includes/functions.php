@@ -8,6 +8,24 @@ const DIENSTEN = ['ochtend', 'middag'];
 const LOCATIES = ['Noord', 'Zuid'];
 
 /**
+ * Vangt een fout op die nergens anders is afgehandeld, bijvoorbeeld een databasefout.
+ *
+ * Waarom: zonder deze functie kan PHP de technische foutmelding op het scherm
+ * zetten, met namen van bestanden en tabellen. Nu gaat de echte fout naar het
+ * logbestand en ziet de bezoeker alleen een algemene melding (TE-04).
+ * Een transactie die nog bezig was, wordt door de database vanzelf teruggedraaid.
+ */
+function onverwachte_fout(Throwable $fout): void
+{
+    error_log('PawPal onverwachte fout: ' . $fout->getMessage());
+    http_response_code(500);
+    exit('Er ging iets mis. Probeer het later opnieuw.');
+}
+
+// PHP roept deze functie aan bij iedere fout (exception) die niet is opgevangen
+set_exception_handler('onverwachte_fout');
+
+/**
  * Maakt tekst veilig om in HTML te tonen (TE-04).
  *
  * Waarom: een gebruiker kan tekst met HTML of JavaScript invullen.

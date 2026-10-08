@@ -254,3 +254,100 @@ Nog niet getest: twee reserveringen op precies hetzelfde moment (staat op dag 5)
 - De pagina's werken op computer en op telefoonbreedte.
 
 **Eisen en planning:** FE-06, FE-07, FE-08, TE-04 en TE-05. Planningstaken T-14 en T-15.
+
+---
+
+## Dag 7 – 7 oktober 2026
+
+**Wat is er gemaakt**
+
+- Een volledige testronde voor alle 8 functionele en 5 technische eisen. De testlijst staat in het hoofdstuk "Testrapport" van de README.
+- Tabellen die op een telefoon en een tablet als blokjes worden getoond.
+- Een nette melding bij fouten die nergens anders worden opgevangen.
+- Het aantal reserveringen per status op het dashboard van de eigenaar.
+- De README met installatie-instructie en testaccounts.
+
+**Hoe werkt het**
+
+- Iedere tabelcel heeft een attribuut `data-label` met de naam van de kolom, bijvoorbeeld `<td data-label="Datum">`. In de CSS staat een `@media (max-width: 800px)`-blok. Dat geldt alleen op schermen tot 800 pixels breed. Daar verdwijnt de koprij, wordt iedere rij een blokje en zet `content: attr(data-label)` de kolomnaam voor de waarde. Er is geen JavaScript voor nodig.
+- `onverwachte_fout()` in `functions.php` wordt door PHP aangeroepen bij een fout die nergens is opgevangen. Dat is geregeld met `set_exception_handler()`. De echte fout gaat naar het logbestand; de bezoeker ziet alleen "Er ging iets mis. Probeer het later opnieuw."
+- Het dashboard van de eigenaar telt de reserveringen met `GROUP BY r.status`. `PDO::FETCH_KEY_PAIR` maakt daar een lijst van zoals `['aangevraagd' => 2, 'goedgekeurd' => 1]`.
+- Het tijdelijke testbestand `test-db.php` is verwijderd.
+
+**Anders dan in mijn ontwerp**
+
+- Geen nieuwe afwijkingen. Het dashboard van de eigenaar toont nu ook reserveringen, zoals in het ontwerp staat.
+
+**Getest**
+
+- Alle tests van dag 2 tot en met 6 zijn opnieuw uitgevoerd en geslaagd, ook na de aanpassing van de tabellen.
+- De 44 tests in het testrapport (in de README) zijn geslaagd.
+- De foutmelding bij een mislukte databaseverbinding is nu ook getest.
+- Alle pagina's zijn bekeken op 375 px, 768 px en computerbreedte: nergens hoef je opzij te schuiven.
+- In de testronde zijn zes problemen gevonden en opgelost; ze staan onderaan het testrapport in de README.
+
+Nog niet getest: op een echte telefoon of tablet, en op Plesk.
+
+**Eisen en planning:** alle FE's en TE's zijn getest. Planningstaken T-16 t/m T-20.
+
+---
+
+## Dag 8 – 8 oktober 2026
+
+**Wat is er gemaakt**
+
+- Een logo linksboven (een pootje) en meer kleur op de hele website.
+- Een gekleurd welkomstblok op de startpagina met een knop naar inloggen of naar het dashboard.
+- In de README: de installatie op Plesk en de lijst met verschillen tussen het ontwerp en de applicatie.
+- Er zijn geen nieuwe bestanden bijgekomen.
+
+**Hoe werkt het**
+
+- Het logo is een SVG-tekening die direct in `includes/header.php` staat: een oranje cirkel (`<circle>`) met vijf witte ovalen (`<ellipse>`) voor het pootje. Er is geen los afbeeldingsbestand nodig. Omdat het in `header.php` staat, verschijnt het op iedere pagina.
+- Hetzelfde pootje is het icoontje in het tabblad van de browser (`<link rel="icon">`).
+- De kleuren staan bovenaan `style.css` als variabelen, bijvoorbeeld `--groenblauw` en `--lichtoranje`. De vier hoofdkleuren uit het ontwerp zijn gebleven; de nieuwe kleuren zijn lichtere en donkerdere tinten daarvan.
+- `linear-gradient()` maakt het kleurverloop in de kop en in het welkomstblok.
+- `.kaart:nth-child(even)` geeft iedere tweede kaart een groenblauwe rand in plaats van een oranje. Hetzelfde gebeurt bij de tabelrijen (om en om een lichtgele rij).
+- Meldingen hebben nu een eigen achtergrondkleur: groen voor gelukt, rood voor een fout en oranje voor een waarschuwing. De tekst "Fout:" staat er nog steeds bij, dus het is niet alleen kleur.
+- De oranje knop heeft donkere tekst, omdat witte tekst op oranje slecht leesbaar is.
+
+**Anders dan in mijn ontwerp**
+
+- Het ontwerp noemt vier kleuren. De applicatie gebruikt die vier plus tinten ervan en een logo.
+- De volledige lijst met verschillen staat in de README.
+
+**Getest**
+
+- Alle tests van dag 2 tot en met 6 en de test met tien reserveringen tegelijk zijn na de nieuwe vormgeving opnieuw uitgevoerd en geslaagd.
+- De startpagina, het inlogscherm, de dieren, de reserveringen en het dashboard zijn bekeken op computer en op telefoonbreedte: nergens hoef je opzij te schuiven.
+
+Nog niet getest: de website op Plesk en op een echte telefoon.
+
+**Eisen en planning:** TE-04 (vormgeving en responsive). Inleveren: GitHub, Plesk, video, ZIP en checklist.
+
+### Videoscript (ongeveer 3 minuten)
+
+Importeer eerst `database/pawpal.sql` opnieuw, zodat de opvangmomenten in de toekomst liggen. Neem het scherm op en vertel erbij wat je doet.
+
+- **0:00 – 0:15** Startpagina. "Dit is PawPal, een planner voor Dierenopvangservice Happy Tails. Er zijn twee rollen: eigenaar en medewerker."
+- **0:15 – 1:10** Log in als Eva (eigenaar). Laat "Mijn dieren" zien, voeg een dier toe, open de verzorging van Max en pas de voeding aan. Ga naar "Reserveringen", kies Max en vraag een opvangmoment op Noord aan. Wijs de status "Aangevraagd" aan.
+- **1:10 – 2:10** Log uit en log in als Medewerker Noord. Laat bij "Capaciteit" zien dat er één plek bezet is. Keur bij "Aanvragen" de aanvraag goed. Open de "Dagplanning" op die datum en klik op "Bekijken" bij Max. Laat de "Wijzigingslog" zien met de aangepaste voeding.
+- **2:10 – 2:45** Foutpad. Log in als Medewerker Zuid en open dezelfde dagplanning met "Alle locaties": bij Max staat "Geen toegang". Log in als Tom en laat zien dat de dieren van Eva er niet staan. Verander in de adresbalk het nummer naar een dier van Eva: "Dit dier is niet gevonden."
+- **2:45 – 3:00** "Ik heb deze applicatie gebouwd met PHP en MySQL. De code staat op GitHub en de site draait op mijn Plesk-omgeving."
+
+### Bewijs per punt van de realisatiechecklist
+
+Vink een punt alleen aan als je het bewijs zelf hebt gecontroleerd.
+
+1. Genoeg functies gebouwd: alle acht FE's, zie de tabel bovenaan de README.
+2. Per functie duidelijk bij welke eis, ontwerp en taak: de README-tabel (eis en pagina) en de commitberichten (taaknummers).
+3. Software start en demo: de site op Plesk en de video.
+4. Functies werken volgens de eisen: het hoofdstuk "Testrapport" in de README, 44 tests.
+5. Verschillen beschreven: de lijst in de README.
+6. Logische indeling en namen: mappen `eigenaar/`, `medewerker/`, `includes/`; Nederlandse namen.
+7. Duidelijke onderdelen, weinig dubbele code: gedeelde functies in `includes/functions.php` en `includes/auth.php`.
+8. Invoer, fouten en opslag: controle op de server, foutmeldingen, transacties en foreign keys.
+9. Beveiliging: hashes, prepared statements, rolcontrole, CSRF-tokens; tests 32 t/m 41 in het testrapport.
+10. Eén centrale repository: de GitHub-link in `github.txt`.
+11. Commits verspreid over de periode: commits op 1, 2, 3, 4, 5, 6 en 8 oktober (controleer met `git log`).
+12. Duidelijke commitberichten: ieder bericht noemt het onderdeel en het taaknummer. Er zijn geen branches gebruikt, omdat het een individueel project is.
