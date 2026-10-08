@@ -200,7 +200,3 @@ Resultaat: alle onderstaande tests zijn geslaagd.
 
 - Op een echte telefoon en een echte tablet (alleen nagebootst in de browser).
 - Op de Plesk-omgeving. Dat gebeurt op dag 8 na het uploaden.
-
-## Meer uitleg
-
-In `examen-uitleg.md` staat per dag wat er gebouwd is en hoe het werkt.

@@ -7,6 +7,9 @@ test-db.php
 # Aantekeningen voor de AI-assistent (alleen lokaal)
 CLAUDE.md
 
+# Eigen studie-aantekeningen (alleen lokaal)
+examen-uitleg.md
+
 # Inleverbestanden en editorinstellingen
 *.zip
 .vscode/
